@@ -42,12 +42,12 @@
     <ClCompile Include="..\Support\Library\ofxsPropertyValidation.cpp">
       <Filter>OpenFX</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\VapourSynthPlugin.cpp">
+    <ClCompile Include="..\src\VapourSynthVegasPlugin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\VapourSynthPlugin.h">
+    <ClInclude Include="..\src\VapourSynthVegasPlugin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

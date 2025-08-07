@@ -2,10 +2,10 @@
 
 #include "ofxsImageEffect.h"
 
-class OFXVapourSynthPluginFactory : public OFX::PluginFactoryHelper<OFXVapourSynthPluginFactory>
+class OFXSVPVapourSynthPluginFactory : public OFX::PluginFactoryHelper<OFXSVPVapourSynthPluginFactory>
 {
 public:
-    OFXVapourSynthPluginFactory();
+    OFXSVPVapourSynthPluginFactory();
     virtual void load() {}
     virtual void unload() {}
     virtual void describe(OFX::ImageEffectDescriptor& p_Desc);

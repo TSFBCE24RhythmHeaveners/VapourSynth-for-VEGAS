@@ -61,7 +61,7 @@ private:
     OFX::PushButtonParam *m_errorButtonParam;
 };
 
-OFXVapourSynthPlugin::OFXVapourSynthPlugin(OfxImageEffectHandle p_Handle)
+OFXSVPVapourSynthPlugin::OFXSVPVapourSynthPlugin(OfxImageEffectHandle p_Handle)
     : ImageEffect(p_Handle)
 {
     m_dstClip = fetchClip(kOfxImageEffectOutputClipName);

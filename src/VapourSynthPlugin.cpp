@@ -1,4 +1,4 @@
-#include "VapourSynthPlugin.h"
+#include "VapourSynthVegasPlugin.h"
 
 #include <stdio.h>
 #include <string>
@@ -12,19 +12,19 @@
 #include <Windows.h>
 
 constexpr char kPluginName[] = "VapourSynth Script";
-constexpr char kPluginGrouping[] = "VapourSynth OFX";
+constexpr char kPluginGrouping[] = "VapourSynth OFX for VEGAS Pro";
 constexpr char kPluginDescription[] = "VapourSynth inline script evaluation";
-constexpr char kPluginIdentifier[] = "com.vapoursynth.resolveofx";
+constexpr char kPluginIdentifier[] = "com.vapoursynth.vegasofx";
 constexpr unsigned int kPluginVersionMajor = 1;
 constexpr unsigned int kPluginVersionMinor = 0;
 
 ////////////////////////////////////////////////////////////////////////////////
 /** @brief The plugin that does our work */
-class OFXVapourSynthPlugin final : public OFX::ImageEffect
+class OFXSVPVapourSynthPlugin final : public OFX::ImageEffect
 {
 public:
-    explicit OFXVapourSynthPlugin(OfxImageEffectHandle p_Handle);
-    ~OFXVapourSynthPlugin() override;
+    explicit OFXSVPVapourSynthPlugin(OfxImageEffectHandle p_Handle);
+    ~OFXSVPVapourSynthPlugin() override;
 
     /* Override the render */
     void render(const OFX::RenderArguments& p_Args) override;
@@ -75,14 +75,14 @@ OFXVapourSynthPlugin::OFXVapourSynthPlugin(OfxImageEffectHandle p_Handle)
     m_vsapi = m_vssapi->getVSAPI(VAPOURSYNTH_API_VERSION);
 }
 
-OFXVapourSynthPlugin::~OFXVapourSynthPlugin() {
+OFXSVPVapourSynthPlugin::~OFXSVPVapourSynthPlugin() {
     m_vsapi->freeNode(m_node);
     m_vssapi->freeScript(m_script);
 }
 
 // If the plugin wants change the frames needed on an input clip from the default values (which is the same as the frame to be renderred),
 // it should do so by calling the OFX::FramesNeededSetter::setFramesNeeded function with the desired frame range.
-void OFXVapourSynthPlugin::getFramesNeeded(const OFX::FramesNeededArguments &p_Args, OFX::FramesNeededSetter &p_FramesNeededSetter)
+void OFXSVPVapourSynthPlugin::getFramesNeeded(const OFX::FramesNeededArguments &p_Args, OFX::FramesNeededSetter &p_FramesNeededSetter)
 {
     std::string script;
     m_scriptParam->getValueAtTime(p_Args.time, script);
@@ -172,7 +172,7 @@ static void VS_CC ofxSourceFree(void *instanceData, VSCore *core, const VSAPI *v
     delete d;
 }
 
-bool OFXVapourSynthPlugin::OpenScript(const std::string &newScript, OFX::Clip *srcClip, int width, int height, int depth) {
+bool OFXSVPVapourSynthPlugin::OpenScript(const std::string &newScript, OFX::Clip *srcClip, int width, int height, int depth) {
     if (m_loadedScript != newScript || m_width != width || m_height != height || m_depth != depth) {
         // fixme, will we ever get here since the identity check exists? hopefully not
         if (newScript.empty())
@@ -355,14 +355,14 @@ void OFXVapourSynthPlugin::setupAndProcess(const OFX::RenderArguments& p_Args)
     m_vsapi->freeFrame(f);
 }
 
-bool OFXVapourSynthPlugin::isIdentity(const OFX::IsIdentityArguments &args, OFX::Clip *&identityClip, double &identityTime) {
+bool OFXSVPVapourSynthPlugin::isIdentity(const OFX::IsIdentityArguments &args, OFX::Clip *&identityClip, double &identityTime) {
     std::string scriptText;
     identityClip = m_srcClip;
     m_scriptParam->getValueAtTime(args.time, scriptText);
     return scriptText.empty();
 }
 
-void OFXVapourSynthPlugin::changedParam(const OFX::InstanceChangedArgs &/*args*/, const std::string &paramName) {
+void OFXSVPVapourSynthPlugin::changedParam(const OFX::InstanceChangedArgs &/*args*/, const std::string &paramName) {
     if (paramName == "errorbutton") {
         if (!m_lastErrorMsg.empty())
             MessageBoxW(nullptr, utf16_from_utf8(m_lastErrorMsg).c_str(), L"VapourSynth Script Error", MB_OK);
@@ -370,12 +370,12 @@ void OFXVapourSynthPlugin::changedParam(const OFX::InstanceChangedArgs &/*args*/
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-OFXVapourSynthPluginFactory::OFXVapourSynthPluginFactory()
-    : OFX::PluginFactoryHelper<OFXVapourSynthPluginFactory>(kPluginIdentifier, kPluginVersionMajor, kPluginVersionMinor)
+OFXSVPVapourSynthPluginFactory::OFXSVPVapourSynthPluginFactory()
+    : OFX::PluginFactoryHelper<OFXSVPVapourSynthPluginFactory>(kPluginIdentifier, kPluginVersionMajor, kPluginVersionMinor)
 {
 }
 
-void OFXVapourSynthPluginFactory::describe(OFX::ImageEffectDescriptor& p_Desc)
+void OFXSVPVapourSynthPluginFactory::describe(OFX::ImageEffectDescriptor& p_Desc)
 {
     // Basic labels
     p_Desc.setLabels(kPluginName, kPluginName, kPluginName);
@@ -480,13 +480,13 @@ void OFXVapourSynthPluginFactory::describeInContext(OFX::ImageEffectDescriptor& 
     page->addChild(*DefineErrorButtonParam(p_Desc, "errorbutton", "Show Error", "Displays the full error message in a dialog"));
 }
 
-OFX::ImageEffect* OFXVapourSynthPluginFactory::createInstance(OfxImageEffectHandle p_Handle, OFX::ContextEnum /*p_Context*/)
+OFX::ImageEffect* OFXSVPVapourSynthPluginFactory::createInstance(OfxImageEffectHandle p_Handle, OFX::ContextEnum /*p_Context*/)
 {
-    return new OFXVapourSynthPlugin(p_Handle);
+    return new OFXSVPVapourSynthPlugin(p_Handle);
 }
 
 void OFX::Plugin::getPluginIDs(PluginFactoryArray& p_FactoryArray)
 {
-    static OFXVapourSynthPluginFactory OFXVapourSynthPlugin;
-    p_FactoryArray.push_back(&OFXVapourSynthPlugin);
+    static OFXSVPVapourSynthPluginFactory OFXSVPVapourSynthPlugin;
+    p_FactoryArray.push_back(&OFXSVPVapourSynthPlugin);
 }

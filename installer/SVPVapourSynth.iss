@@ -1,15 +1,15 @@
 #define Version '1.0'
 #define VersionExtra ''
 
-#define AppName 'VapourSynth for Resolve'
-#define AppId 'OFXVapourSynth'
-#define RegistryPath 'SOFTWARE\OFX VapourSynth'
+#define AppName 'VapourSynth for VEGAS'
+#define AppId 'SVPVapourSynth'
+#define RegistryPath 'SOFTWARE\SVP VapourSynth'
 #define SourceBinaryPath '..\msvc\x64\Release'
 
 
 [Setup]
 OutputDir=Compiled
-OutputBaseFilename=VapourSynth for Resolve {#= Version}{#= VersionExtra}
+OutputBaseFilename=VapourSynth for VEGAS {#= Version}{#= VersionExtra}
 Compression=lzma2/max
 SolidCompression=yes
 VersionInfoDescription={#= AppName} {#= Version}{#= VersionExtra} Installer
@@ -17,10 +17,10 @@ AppId={#= AppId}
 AppName={#= AppName} {#= Version}{#= VersionExtra}
 AppVersion={#= Version}{#= VersionExtra}
 AppVerName={#= AppName} {#= Version}{#= VersionExtra}
-AppPublisher=Fredrik Mellbin
-AppPublisherURL=https://github.com/Hank-tha-Cowdog/VapourSynth-for-Resolve
-AppSupportURL=https://github.com/Hank-tha-Cowdog/VapourSynth-for-Resolve
-AppUpdatesURL=https://github.com/Hank-tha-Cowdog/VapourSynth-for-Resolve
+AppPublisher=TSFBCE24RhythmHeaveners
+AppPublisherURL=https://github.com/TSFBCE24RhythmHeaveners/VapourSynth-for-VEGAS
+AppSupportURL=https://github.com/TSFBCE24RhythmHeaveners/VapourSynth-for-VEGAS
+AppUpdatesURL=https://github.com/TSFBCE24RhythmHeaveners/VapourSynth-for-VEGAS
 VersionInfoVersion={#= Version}.0.0
 UsePreviousAppDir=yes
 DefaultDirName={autopf}\{#= AppId}
@@ -41,10 +41,10 @@ Name: "en"; MessagesFile: "compiler:Default.isl"
 Name: Full; Description: Full installation
 
 [Files]
-Source: {#= SourceBinaryPath}\VapourSynthPlugin.dll; DestDir: {commoncf}\OFX\Plugins\VapourSynthPlugin.ofx.bundle\Contents\Win64; DestName: VapourSynthPlugin.ofx; Flags: ignoreversion uninsrestartdelete restartreplace
+Source: {#= SourceBinaryPath}\VapourSynthVegasPlugin.dll; DestDir: {commoncf}\OFX\Plugins\VapourSynthVegasPlugin.ofx.bundle\Contents\Win64; DestName: VapourSynthVegasPlugin.ofx; Flags: ignoreversion uninsrestartdelete restartreplace
 
 [Icons]
-Name: {group}\VapourSynth for Resolve Website; Filename: https://github.com/Hank-tha-Cowdog/VapourSynth-for-Resolve
+Name: {group}\VapourSynth for Resolve Website; Filename: https://github.com/TSFBCE24RhythmHeaveners/VapourSynth-for-VEGAS
 
 [Registry]
 Root: HKA; Subkey: {#= RegistryPath}; ValueType: string; ValueName: "Version"; ValueData: {#= Version}; Flags: uninsdeletevalue uninsdeletekeyifempty
